@@ -8,7 +8,9 @@ This is a small application that can visualize graph with node(s) and normal edg
 
 - Highlight nodes of a connected subgraph
 
-- Apply circular layout for the whole graph
+- Apply circular layout to the whole graph
+
+- By default, the "Import Data" button will import a synthetic data of twitter users (real usernames but synthetic connectivity) and add it to the graph object of the app.
 
 -----
 
