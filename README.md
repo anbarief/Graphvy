@@ -1,6 +1,6 @@
 # Minigraphviz (test version)
 
-This is a small application that can visualize graph with node(s) and normal edge(s) made using Kivy. It has feaures of:
+This is a small application that can visualize graph with node(s) and normal edge(s) made using Kivy (www.kivy.org). It has feaures of:
 
 - Add node(s)
 
