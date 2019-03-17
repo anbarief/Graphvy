@@ -579,7 +579,7 @@ class Axis(Widget):
             k = 1/4
         else:
             k = 2
-        dataset = list(numpy.load("synthetic_data.npy"))
+        dataset = list(numpy.load("data.npy"))
         nodes = []
         for i in dataset:
             x = random.uniform(0, 2*k*800)
