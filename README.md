@@ -1,6 +1,6 @@
 # Graphvy (test version)
 
-Basic graph (data) visualization using Kivy (www.kivy.org). It has feaures of:
+Basic graph (data) visualization using Kivy (www.kivy.org). It has features of:
 
 - Add node(s)
 
@@ -30,9 +30,10 @@ Requirements:
 
 -Numpy 1.14.1
 
-To use the app, simply run the `minigraphviz.py`.
+To use the app, simply run the `graphvy.py`.
 
 -----
+[b]Preview[/b]:
 
 ![](demo_01.gif)
 
