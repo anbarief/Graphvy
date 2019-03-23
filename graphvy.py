@@ -1,3 +1,6 @@
+#Author: Arief Anbiya
+#Year: 2019
+
 import random
 import math
 import copy
