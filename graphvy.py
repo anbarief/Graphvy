@@ -1,6 +1,3 @@
-#Author: Arief Anbiya
-#Year: 2019
-
 import random
 import math
 import copy
@@ -20,9 +17,11 @@ from kivy.graphics import Ellipse, Color, Line, Rectangle
 from kivy.properties import ListProperty
 from kivy.clock import Clock
 
+import matplotlib.pyplot as plt
+from matplotlib.patches import Circle
 
 wsize = Window.size
-Window.clearcolor = (100/255, 100/255, 100/255, 0.9)
+Window.clearcolor = (180/255, 180/255, 180/255, 0.9)
 node_info = "Name: {}, Value: {}, Degree: {}, ID: {}"
 font_file = 'Sofia-Regular.otf'
 
@@ -166,6 +165,14 @@ class MainScreen(FloatLayout):
         self.import_data_button.bind(on_release = self.axis.import_data)
         self.buttons.append(self.import_data_button)
 
+        self.generate_plot_button = Button(text = "Generate Plot", font_size = 10, font_name = font_file)
+        self.add_widget(self.generate_plot_button)
+        self.generate_plot_button.size_hint = (0.1, 0.1)
+        self.generate_plot_button.pos_hint = {'x':0.9, 'y': 0.3}
+        self.generate_plot_button.halign = "center"
+        self.generate_plot_button.bind(on_release = self.axis.gen_plot)
+        self.buttons.append(self.generate_plot_button)
+
         self.goto_button = Button(text = "Go To Point", font_size = 10, font_name = font_file)
         self.add_widget(self.goto_button)
         self.goto_button.size_hint = (0.1, 0.1)
@@ -224,8 +231,8 @@ class Map(Widget):
         self.canvas.add(self.bg_color)
         self.canvas.add(self.rectangle)
         if len(self.graph.nodes) > 0:      
-            self.nodes_x_min, self.nodes_x_max = min([i.coordinates[0] for i in self.graph.nodes]), max([i.coordinates[0] for i in self.graph.nodes])
-            self.nodes_y_min, self.nodes_y_max = min([i.coordinates[1] for i in self.graph.nodes]), max([i.coordinates[1] for i in self.graph.nodes])
+            self.nodes_x_min, self.nodes_x_max = self.graph.nodes_xmin, self.graph.nodes_xmax 
+            self.nodes_y_min, self.nodes_y_max = self.graph.nodes_ymin, self.graph.nodes_ymax
 
             self.dx = self.nodes_x_max-self.nodes_x_min
             self.dy = self.nodes_y_max-self.nodes_y_min
@@ -362,7 +369,7 @@ class Node(Button):
             root.axis.edge_drawer.canvas.add(color)
             root.axis.edge_drawer.canvas.add(line)
 
-            edge_obj = NormalEdge(nodes, line)
+            edge_obj = NormalEdge(nodes, line, (0/255,150/255, 255/255, 0.5))
             nodes[0].add_edge(edge_obj)
             nodes[0].neighbor.append(nodes[1])
             nodes[1].add_edge(edge_obj)
@@ -415,7 +422,7 @@ class Node(Button):
                         root.axis.edge_drawer.canvas.add(color)
                         root.axis.edge_drawer.canvas.add(line)
 
-                        edge_obj = NormalEdge(nodes, line)
+                        edge_obj = NormalEdge(nodes, line, (0/255,150/255, 255/255, 0.5))
                         nodes[0].add_edge(edge_obj)
                         nodes[0].neighbor.append(nodes[1])
                         nodes[1].add_edge(edge_obj)
@@ -472,9 +479,12 @@ class Node(Button):
 
 class NormalEdge:
 
-    def __init__(self, nodes, line):
+    def __init__(self, nodes, line, color):
         self.nodes = nodes
         self.line = line
+        self.line_coordinates = [self.nodes[0].coordinates[0], self.nodes[0].coordinates[1], \
+                                 self.nodes[1].coordinates[0], self.nodes[1].coordinates[1]]
+        self.color = color
 
     def update_line(self):
         self.line.points = [self.nodes[0].center[0], self.nodes[0].center[1], \
@@ -509,6 +519,22 @@ class Graph(Widget):
             if (self.container.map_option == 1):
                 root.map.clear_visual()
                 root.map.apply_visual()
+
+    @property
+    def nodes_xmin(self):
+        return min([i.coordinates[0] for i in self.nodes])
+
+    @property
+    def nodes_xmax(self):
+        return max([i.coordinates[0] for i in self.nodes])
+
+    @property
+    def nodes_ymin(self):
+        return min([i.coordinates[1] for i in self.nodes])
+
+    @property
+    def nodes_ymax(self):
+        return max([i.coordinates[1] for i in self.nodes]) 
 
     @property
     def edges(self):
@@ -550,6 +576,7 @@ class Axis(Widget):
         self.edit_node_option = -1
         self.connected_subgraph_option = -1
         self.map_option = -1
+         
         self.a_to_b = []
         self.graph = Graph(container = self)
 
@@ -737,14 +764,34 @@ class Axis(Widget):
                 root.goto_box.text = "Invalid coordinates"
         else:
             root.goto_box.text = "Invalid coordinates"
-            
-            
-if __name__ == "__main__":
-        
-    root = MainScreen()
-    class graphvyApp(App):
-        def build(self):
-            return root
 
+    def gen_plot(self, obj):
+
+        if len(self.graph.nodes) > 0:
+
+            self.fig, self.ax = plt.subplots()
+            self.ax.set_axis_bgcolor(Window.clearcolor)
+            self.ax.axis('square')
+            for e in self.graph.edges:
+                points = e.line_coordinates
+                self.ax.plot([points[0], points[2]], [points[1], points[3]], '-', color = e.color)
+
+            for i in self.graph.nodes:
+                x, y = i.coordinates[0], i.coordinates[1]
+                circle = Circle(xy = [x, y], radius = 12.5, fc = i.visual_color, ec = "black")
+                self.ax.add_patch(circle)
+                self.ax.text(x, y, i.visual_text, fontsize = 8)
+
+        
+            self.ax.set_xlim([self.graph.nodes_xmin, self.graph.nodes_xmax])
+            self.ax.set_ylim([self.graph.nodes_ymin, self.graph.nodes_ymax])
+            plt.show(self.fig)
+
+root = MainScreen()
+class graphvyApp(App):
+    def build(self):
+        return root
+
+if __name__ == "__main__":
     app = graphvyApp()
     app.run()
