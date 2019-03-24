@@ -28,8 +28,8 @@ font_file = 'Sofia-Regular.otf'
 
 
 def animation_path():
-    dx = 1
-    bound = 10
+    dx = 2
+    bound = 5
     n = int(bound/dx)
     path = [(0,0)]
     
