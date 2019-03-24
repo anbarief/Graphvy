@@ -2,13 +2,13 @@
 
 Author: Arief Anbiya (anbarief@live.com), 2019
 
-Requirements: Python 3.5, Kivy 1.10.0, Numpy 1.14.1
+Requirements: Python 3.5, Kivy 1.10.0, Numpy 1.14.1, Matplotlib 1.5.1
 
 -----
 
-Basic graph (data) visualization using Kivy (www.kivy.org). It has features of:
+Basic graph (data) exploration and visualization using Kivy (www.kivy.org). It has features of:
 
-- Add node(s). Connect two nodes. Highlight nodes of a connected subgraph. Edit node's name. Nodes map. Go to a point.
+- Add node(s). Connect two nodes. Highlight nodes of a connected subgraph. Edit node's name. Nodes map. Go to a point. Generate plot (Matplotlib).
 
 - By default, the "Import Data" button will import a synthetic data of twitter users (real usernames but synthetic connectivity) and add it to the graph object of the app. To use different data, the filename must be `data.npy` and the format is a list of dictionaries of nodes and their neighbors ---> `[{'name': "name_of_node_1", 'neighbor': ["name_of_node_i", ....]}, ...]`
 
@@ -18,8 +18,14 @@ Basic graph (data) visualization using Kivy (www.kivy.org). It has features of:
 
 **Preview:**
 
+*Exploratory:*
+
 ![](demo_01.gif)
 
 ![](demo_02.gif)
 
 ![](demo_03.gif)
+
+*Generate plot using Matplotlib:*
+
+![](demo_plot.png)
