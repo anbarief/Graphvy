@@ -1,4 +1,4 @@
-# Graphvy (test version)
+# Graphvy (mini version)
 
 Author: Arief Anbiya (anbarief@live.com), 2019
 
